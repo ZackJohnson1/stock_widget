@@ -1,0 +1,43 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Live Stocks</title>
+  <style>
+    body {
+      font-family: monospace;
+      background: black;
+      color: lime;
+      padding: 2rem;
+    }
+    h1 {
+      color: cyan;
+    }
+    .ticker {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>📈 Live Stock Ticker</h1>
+  <div id="tickers">Loading...</div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const tickersDiv = document.getElementById('tickers');
+
+    socket.on('stock update', (prices) => {
+      tickersDiv.innerHTML = '';
+      for (const [symbol, price] of Object.entries(prices)) {
+        const el = document.createElement('div');
+        el.className = 'ticker';
+        el.textContent = `${symbol}: $${price}`;
+        tickersDiv.appendChild(el);
+      }
+    });
+  </script>
+</body>
+</html>
